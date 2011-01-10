@@ -47,7 +47,7 @@ Interested in hosting your own version or participating in the development? The 
 Credits
 -------
 
-The proxy for the [GitHub API](http://develop.github.com/) is hosted on [Google App Engine](http://code.google.com/appengine/). The platform uses [easyXDM](http://easyxdm.net/), [jQuery](http://jquery.com/) and [David Walsh's buttons](http://davidwalsh.name/github-css).
+The proxy for the [GitHub API](http://develop.github.com/) is hosted on [Google App Engine](http://code.google.com/appengine/). The platform uses [easyXDM](http://easyxdm.net/), [jQuery](http://jquery.com/) and [David Walsh's GitHub buttons](http://davidwalsh.name/github-css).
 
 Authors
 -------
@@ -55,3 +55,5 @@ Authors
 GHA is maintained by:
 
 Abraham Williams - @[abraham](https://twitter.com/abraham) - <the@abrha.am> - <http://abrah.am>
+
+Ryan LeFevre - @[meltingice](https://twitter.com/meltingice) - <meltingice8917@gmail.com> - <http://meltingice.net>
