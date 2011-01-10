@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8'>
+  <title>Callback - GitHub Anywhere</title>
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js'></script>
+
+  <script>
+  function getUrlVariables() {
+    console.log('getUrlVariables()');
+    var variables = [], hash, hashes, i, l;
+    hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    l = hashes.length;
+    for (i = 0; i < l; i++) {
+      hash = hashes[i].split('=');
+      variables.push(hash[0]);
+      variables[hash[0]] = hash[1];
+    }
+    return variables;
+  }
+
+  function saveCode(code) {
+    console.log('saveCode()');
+    var d = new Date();
+    localStorage.setItem('time', d.getTime());
+    localStorage.setItem('code', code);
+    console.log('window.close()');
+    window.close();
+  }
+
+  $(function () {
+    console.log('function()');
+    var code = getUrlVariables().code;
+    code ? saveCode(code) : console.log('No code...');
+  });
+  </script>
+</head>
+<body>
+Please wait...
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8'>
+  <title>xdr</title>
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js'></script>
+  <script src="/javascript/easyXDM.min.js"></script>
+
+  <script>
+    var rpc = new easyXDM.Rpc({}, {
+      local: {
+        get: function (options, successCallback, errorCallback) {
+          console.log(options);
+          parameters = options.parameters || {};
+          console.log(parameters);
+          $.get(options.path, parameters, successCallback);
+        },
+        post: function (options, successCallback, errorCallback) {
+          parameters = options.parameters || {};
+          $.post(options.path, parameters, successCallback);
+        },
+        completeAuthentication: function (successCallback, errorCallback) {
+          console.log('rpc.completeAuthentication()');
+          var accessToken, code = get('code');
+          if(code) {
+            $.post('/login/oauth/access_token', { code: code }, function(response) {
+              remove('code');
+              remove('time');
+              if (response.split('=')[0] === 'access_token') {
+                successCallback({ accessToken: response.split('=')[1] });
+              } else {
+                errorCallback({ error: response });                
+              }
+            });
+          } else {
+            errorCallback();
+          }
+        },
+        startAuthentication: function (successCallback, errorCallback) {
+          remove('code');
+          remove('time');
+        }
+      },
+      remote: {
+        get: {},
+        post: {},
+        completeAuthentication: {},
+        startAuthentication: {}
+      }
+    });
+    
+    function get(key) {
+      console.log('get()');
+      return localStorage.getItem(key) || false;
+    }
+    
+    function remove(key) {
+      console.log('remove()');
+      localStorage.removeItem(key);
+    }
+    
+  </script>
+</head>
+<body>
+<a href='/'>Please go here</a>
+</body>
+</html>

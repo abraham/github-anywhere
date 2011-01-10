@@ -1,0 +1,61 @@
+/* button basics */
+a.github-anywhere-minibutton {
+  display:inline-block;
+  height:23px;
+  padding:0 0 0 3px;
+  font-size:11px;
+  font-weight:bold;
+  color:#333;
+  text-shadow:1px 1px 0 #fff; 
+  background:url(https://githubanywhere.appspot.com/images/minibutton_matrix.png) 0 0 no-repeat;
+  white-space:nowrap;
+  border:none;
+  overflow:visible;
+  cursor:pointer;
+  text-decoration:none;
+}
+
+a.github-anywhere-minibutton > span {
+  display:block;
+  height:23px;
+  padding:0 10px 0 8px;
+  line-height:23px;
+  background:url(https://githubanywhere.appspot.com/images/minibutton_matrix.png) 100% 0 no-repeat;
+}
+
+a.github-anywhere-minibutton:hover, a.github-anywhere-minibutton:focus {
+  color:#fff;
+  text-decoration:none;
+  text-shadow:-1px -1px 0 rgba(0,0,0,0.3);
+  background-position:0 -30px;
+}
+a.github-anywhere-enabled:hover, a.github-anywhere-enabled:focus {
+  color:#fff;
+  text-decoration:none;
+  text-shadow:-1px -1px 0 rgba(0,0,0,0.3);
+  background-position:0 -90px;
+}
+a.github-anywhere-minibutton:hover > span, a.github-anywhere-minibutton:focus > span {background-position:100% -30px;}
+a.github-anywhere-enabled:hover > span, a.github-anywhere-enabled:focus > span {background-position:100% -90px;}
+
+a.github-anywhere-minibutton.mousedown{background-position:0 -60px; }
+a.github-anywhere-minibutton.mousedown > span{background-position:100% -60px; }
+
+a.github-anywhere-enabled > span {
+  display:block;
+  height:23px;
+  padding:0 10px 0 8px;
+  line-height:23px;
+  background:url(https://githubanywhere.appspot.com/images/minibutton_matrix.png) 100% -90 no-repeat;
+}
+
+/* with icon */
+a.github-anywhere-watch .github-anywhere-icon {
+  float:left;
+  margin-left:-4px;
+  width:18px;
+  height:22px;
+  background:url(https://githubanywhere.appspot.com/images/minibutton_icons.png) 0 0 no-repeat;
+}
+a.github-anywhere-watch .github-anywhere-icon {background-position:-20px 0;}
+a.github-anywhere-watch:hover .github-anywhere-icon, a.github-anywhere-watch:focus .github-anywhere-icon {background-position:-20px -25px;}
