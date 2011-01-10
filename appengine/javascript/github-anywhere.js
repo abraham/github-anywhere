@@ -7,6 +7,7 @@
     style: false
   },
   callback = function () {},
+  ready_queue = [],
   config = {
     xdrURL: 'https://githubanywhere.appspot.com/xdr.html',
     clientID: '',
@@ -29,7 +30,20 @@
   function GHA(c) {
     console.log('GHA()');
     callback = c;
+    
+    ready();
   }
+  
+  function ready() {
+    if (ext_is_loaded()) {
+      $(document).ready(function () {
+        callback(G);
+        callback = false;
+      });
+    } else {
+      ready_queue.push(callback);
+    }
+  };
   
   if (typeof window.GitHubAnywhere === 'function') {
     // We're already loaded for whatever reason.
@@ -82,12 +96,21 @@
         finished_load();
       };
       
+      loaded.style = true;
+      
       head.appendChild(s);
     }
+    
+    finished_load();
+  }
+  
+  function ext_is_loaded() {
+    return loaded.jQuery && loaded.easyXDM && loaded.style;
   }
   
   function finished_load() {
-    if (loaded.jQuery && loaded.easyXDM && loaded.style) {
+    console.log('finished_load()');
+    if (ext_is_loaded()) {
       init();
     }
   }
@@ -113,8 +136,12 @@
         }
       });
     }
-    callback(G);
-    callback = false;
+
+    if (ready_queue.length > 0) {
+      $.each(ready_queue, function (i, func) {
+        func(G);
+      });
+    }
   }
 
   G.buttons = function (selector) {
