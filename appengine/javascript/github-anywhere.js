@@ -6,8 +6,7 @@
     easyXDM: typeof window.easyXDM === 'object' || false,
     style: false
   },
-  callback = function () {},
-  ready_queue = [],
+  readyQueue = [],
   config = {
     xdrURL: 'https://githubanywhere.appspot.com/xdr.html',
     clientID: '',
@@ -27,26 +26,24 @@
     };
   }
   
-  function GHA(c) {
+  function GHA(callback) {
     console.log('GHA()');
-    callback = c;
-    
-    ready();
+    ready(callback);
   }
   
-  function ready() {
-    if (ext_is_loaded()) {
+  function ready(callback) {
+    console.log('ready()');
+    if (externalIsLoaded()) {
       $(document).ready(function () {
         callback(G);
-        callback = false;
       });
     } else {
-      ready_queue.push(callback);
+      readyQueue.push(callback);
     }
   };
   
   if (typeof window.GitHubAnywhere === 'function') {
-    // We're already loaded for whatever reason.
+    // GitHubAnywhere already loaded for whatever reason.
     return;
   } else {
     console.log('Adding GitHubAnywhere to window');
@@ -57,16 +54,15 @@
   
   function load() {
     console.log('load()');
-    var head = document.getElementsByTagName('head')[0], script, link;
+    var head = document.getElementsByTagName('head')[0];
     
     if (!loaded.jQuery) {
       var j = document.createElement('script');
-      j.type = 'text/javascript';
       j.src = config.jQuerySource;
       j.onload = function () {
         loaded.jQuery = true;
         console.log('jQuery finished loading');
-        finished_load();
+        finishedLoad();
       };
       
       head.appendChild(j);
@@ -74,43 +70,37 @@
     
     if (!loaded.easyXDM) {
       var e = document.createElement('script');
-      e.type = 'text/javascript';
       e.src = config.easyXDMSource;
       e.onload = function () {
         loaded.easyXDM = true;
         console.log('easyXDM finished loading');
-        finished_load();
+        finishedLoad();
       };
       
       head.appendChild(e);
     }
     
     if (!loaded.style) {
+      console.log('Stylesheet finished loading');
       var s = document.createElement('link');
-      s.type = 'text/css';
       s.rel = 'stylesheet';
       s.href = config.styleSource;
-      s.onload = function () {
-        loaded.style = true;
-        console.log('Stylesheet finished loading');
-        finished_load();
-      };
-      
       loaded.style = true;
       
       head.appendChild(s);
     }
     
-    finished_load();
+    finishedLoad();
   }
   
-  function ext_is_loaded() {
+  function externalIsLoaded() {
+    console.log('externalIsLoaded()');
     return loaded.jQuery && loaded.easyXDM && loaded.style;
   }
   
-  function finished_load() {
-    console.log('finished_load()');
-    if (ext_is_loaded()) {
+  function finishedLoad() {
+    console.log('finishedLoad()');
+    if (externalIsLoaded()) {
       init();
     }
   }
@@ -137,8 +127,8 @@
       });
     }
 
-    if (ready_queue.length > 0) {
-      $.each(ready_queue, function (i, func) {
+    if (readyQueue.length > 0) {
+      $.each(readyQueue, function (i, func) {
         func(G);
       });
     }
