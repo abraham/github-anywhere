@@ -1,10 +1,9 @@
 (function () {
   var G = {},
-  callback = false,
   rpc = false,
-  loading = {
-    jQuery: false,
-    easyXDM: false,
+  loaded = {
+    jQuery: typeof window.jQuery === 'function' || false,
+    easyXDM: typeof window.easyXDM === 'object' || false,
     style: false
   },
   callback = function () {},
@@ -17,14 +16,14 @@
     jQuerySource: 'https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js',
     styleSource: 'https://githubanywhere.appspot.com/style/style.css'
   };
-
-  if (typeof window.GitHubAnywhere !== 'function') {
-    console.log('Adding GitHubAnywhere to window');
-    window.GitHubAnywhere = GHA;
-  }
   
-  if (typeof window.jQuery !== 'function') {
-    load();
+  // Fix issues with browsers that don't have consoles enabled.
+  if (!('console' in window)) {
+    window.console = {
+      log: function () {},
+      info: function () {},
+      error: function () {}
+    };
   }
   
   function GHA(c) {
@@ -32,31 +31,63 @@
     callback = c;
   }
   
+  if (typeof window.GitHubAnywhere === 'function') {
+    // We're already loaded for whatever reason.
+    return;
+  } else {
+    console.log('Adding GitHubAnywhere to window');
+    window.GitHubAnywhere = GHA;
+    
+    load();
+  }
+  
   function load() {
     console.log('load()');
-    var head = document.getElementsByTagName('head').item(0), script, link;
-    if (typeof window.jQuery !== 'function' || typeof window.easyXDM !== 'object') {
-      if (!loading.jQuery) {
-        loading.jQuery = true;
-        script = document.createElement("script");
-        script.src = config.jQuerySource;
-        head.appendChild(script); 
-      }
-      if (!loading.easyXDM) {
-        loading.easyXDM = true;
-        script = document.createElement("script");
-        script.src = config.easyXDMSource;
-        head.appendChild(script);
-      }
-      if (!loading.style) {
-        loading.style = true;
-        link = document.createElement("link");
-        link.rel = 'stylesheet';
-        link.href = config.styleSource;
-        head.appendChild(link);        
-      }
-      setTimeout(load, 50);
-    } else {
+    var head = document.getElementsByTagName('head')[0], script, link;
+    
+    if (!loaded.jQuery) {
+      var j = document.createElement('script');
+      j.type = 'text/javascript';
+      j.src = config.jQuerySource;
+      j.onload = function () {
+        loaded.jQuery = true;
+        console.log('jQuery finished loading');
+        finished_load();
+      };
+      
+      head.appendChild(j);
+    }
+    
+    if (!loaded.easyXDM) {
+      var e = document.createElement('script');
+      e.type = 'text/javascript';
+      e.src = config.easyXDMSource;
+      e.onload = function () {
+        loaded.easyXDM = true;
+        console.log('easyXDM finished loading');
+        finished_load();
+      };
+      
+      head.appendChild(e);
+    }
+    
+    if (!loaded.style) {
+      var s = document.createElement('link');
+      s.type = 'text/css';
+      s.rel = 'stylesheet';
+      s.href = config.styleSource;
+      s.onload = function () {
+        loaded.style = true;
+        console.log('Stylesheet finished loading');
+        finished_load();
+      };
+      
+      head.appendChild(s);
+    }
+  }
+  
+  function finished_load() {
+    if (loaded.jQuery && loaded.easyXDM && loaded.style) {
       init();
     }
   }
