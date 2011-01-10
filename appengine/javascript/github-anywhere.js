@@ -317,19 +317,19 @@
 
   function get(key) {
     console.log('get()');
-    return localStorage.getItem(key) && localStorage.getItem(key) != 'undefined' ? localStorage.getItem(key) : false;
+    return localStorage.getItem('gitHubAnywhere_' + key) && localStorage.getItem('gitHubAnywhere_' + key) != 'undefined' ? localStorage.getItem('gitHubAnywhere_' + key) : false;
   }
 
   function set(key, value) {
     console.log('set()');
-    localStorage.setItem(key, value);
-    localStorage.setItem(key + 'Time', time());
+    localStorage.setItem('gitHubAnywhere_' + key, value);
+    localStorage.setItem('gitHubAnywhere_' + key + 'Time', time());
   }
   
   function remove(key) {
     console.log('remove()');
-    localStorage.removeItem(key);
-    localStorage.removeItem(key + 'Time');
+    localStorage.removeItem('gitHubAnywhere_' + key);
+    localStorage.removeItem('gitHubAnywhere_' + key + 'Time');
   }
   
   function time() {
