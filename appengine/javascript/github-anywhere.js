@@ -9,7 +9,7 @@
   readyQueue = [],
   config = {
     xdrURL: 'https://githubanywhere.appspot.com/xdr.html',
-    clientID: '',
+    clientID: '605fdb0289347957e1b1',
     redirectURI: 'https://githubanywhere.appspot.com/callback.html',
     scope: 'user,public_repo,gist',
     easyXDMSource: 'https://githubanywhere.appspot.com/javascript/easyXDM.min.js',
