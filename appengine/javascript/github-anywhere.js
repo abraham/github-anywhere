@@ -86,11 +86,12 @@
   }
   
   /**
-   *  Appends a script elemnt to <head>
-   * @param {object} options containing parameters of:
-   *   @param {string} source url from Config
-   *   @param {string} name of script being loaded
-   *   @param {object} head element to append script to
+   *  Appends a script elemnt to <head>.
+   *  @param {object} options containing parameters of:
+   *    @param {string} source url from Config
+   *    @param {string} name of script being loaded
+   *    @param {object} head element to append script to
+   *  @private
    */
   function appendScript(options) {
     console.log('appendScript()');
@@ -104,11 +105,20 @@
     options.head.appendChild(script);
   }
   
+  /**
+   *  Checks to see if all scripts and stylesheets have loaded.
+   *  @returns {boolean}
+   *  @private
+   */
   function externalIsLoaded() {
     console.log('externalIsLoaded()');
     return loaded.jQuery && loaded.easyXDM && loaded.style;
   }
   
+  /**
+   *  If externals have loaded fire init()
+   *  @private
+   */
   function finishedLoad() {
     console.log('finishedLoad()');
     if (externalIsLoaded()) {
@@ -116,6 +126,10 @@
     }
   }
   
+  /**
+   *  Create an easyXDM provider if none exist and fire any queued functions.
+   *  @private
+   */
   function init() {
     console.log('init()');
     if (!rpc) {
@@ -145,11 +159,21 @@
     }
   }
 
+  /**
+   *  Starts a scan of the page for GHA buttons.
+   *  @param {string} selector for jQuery to find
+   */
   G.buttons = function (selector) {
     console.log('G.buttons()');
     scanPage(selector);
   }
   
+  /**
+   *  Scans the page for GHA classes to attach appropriate actions.
+   *  @param {string} selector for jQuery to find
+   *  @default {string} 'a.github-anywhere'
+   *  @private
+   */
   function scanPage(selector) {
     console.log('scanPage()');
     var $github, $link, user, repo,
@@ -220,6 +244,12 @@
     });
   }
   
+  /**
+   *  Opens a popup to github.com to authenticate user and starts checkForCode loop.
+   *  @returns {boolean}
+   *  @default {boolean} false
+   *  @private 
+   */
   function startAuthentication() {
     console.log('startAuthentication()');
     var child,
@@ -230,12 +260,21 @@
     return false;
   }
 
+  /**
+   *  User has finished authentication flow so perform action delayed for authentication.
+   *  @private
+   */
   function completeAuthentication(options) {
     console.log('completeAuthentication()');
     set('accessToken', options.accessToken);
     performNextAction();
   };
 
+  /**
+   *  Checks to see if user has copmleted auth flow every 500 ms.
+   *  @param {object} options passed from github if auth failed
+   *  @private
+   */
   function checkForCode(options) {
     console.log('checkForCode()');
     if (options && options.message && options.message.error) {
@@ -248,6 +287,10 @@
     }
   }
 
+  /**
+   *  Authentication flow has finished so perform action started when unauthenticated.
+   *  @private
+   */
   function performNextAction() {
     console.log('performNextAction()');
     var nextAction = get('nextAction');
@@ -336,23 +379,46 @@
     }
   }
 
+  /**
+   *  Get value from localStorage.
+   *  @param {string} key of value to get
+   *  @returns {mixed} value
+   *  @default {boolean} false
+   *  @private
+   */
   function get(key) {
     console.log('get()');
     return localStorage.getItem('gitHubAnywhere_' + key) && localStorage.getItem('gitHubAnywhere_' + key) != 'undefined' ? localStorage.getItem('gitHubAnywhere_' + key) : false;
   }
 
+  /**
+   *  Set value to localStorage.
+   *  @param {string} key of value to set
+   *  @param {mixed} value to set
+   *  @private
+   */
   function set(key, value) {
     console.log('set()');
     localStorage.setItem('gitHubAnywhere_' + key, value);
     localStorage.setItem('gitHubAnywhere_' + key + 'Time', time());
   }
   
+  /**
+   *  Remove key and value from localStogae.
+   *  @param {string} key of value to remove
+   *  @private
+   */
   function remove(key) {
     console.log('remove()');
     localStorage.removeItem('gitHubAnywhere_' + key);
     localStorage.removeItem('gitHubAnywhere_' + key + 'Time');
   }
   
+  /**
+   *  Get the current time in milliseconds.
+   *  @returns {integer}
+   *  @private
+   */
   function time() {
     console.log('time()');
     var d = new Date();
