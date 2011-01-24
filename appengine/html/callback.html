@@ -3,9 +3,10 @@
 <head>
   <meta charset='utf-8'>
   <title>Callback - GitHub Anywhere</title>
-  <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js'></script>
+  <link rel='stylesheet' href='https://githubanywhere.appspot.com/style/style.css'>
 
   <script>
+  var code = getUrlVariables().code;
   function getUrlVariables() {
     console.log('getUrlVariables()');
     var variables = [], hash, hashes, i, l;
@@ -18,24 +19,24 @@
     }
     return variables;
   }
-
-  function saveCode(code) {
-    console.log('saveCode()');
+  
+  function authorize(choice) {
+    console.log('authorize()');
     var d = new Date();
     localStorage.setItem('time', d.getTime());
-    localStorage.setItem('code', code);
-    console.log('window.close()');
+    localStorage.setItem('code', choice ? code : false);
     window.close();
   }
-
-  $(function () {
-    console.log('function()');
-    var code = getUrlVariables().code;
-    code ? saveCode(code) : console.log('No code...');
-  });
   </script>
 </head>
 <body>
-Please wait...
+  <section>
+    <h1>GitHub Anywhere</h1>
+    <div id='content'>
+      <p>The site that opened this window would like to access your GitHub account.</p>
+      <a class='github-anywhere github-anywhere-minibutton' data-user='abraham'><span onclick='authorize(true)'>Authorize site to access and update my GitHub account</span></a>
+      <a class='github-anywhere github-anywhere-minibutton github-anywhere-enabled' data-user='abraham'><span onclick='authorize(false)'>Don't authorize site</span></a>
+      <p>Learn more at <a href='http://abrah.am/github-anywhere'>abrah.am/github-anywhere</a>.</p>
+  </section>
 </body>
 </html>
