@@ -57,27 +57,19 @@
     var head = document.getElementsByTagName('head')[0];
     
     if (!loaded.jQuery) {
-      var j = document.createElement('script');
-      j.src = config.jQuerySource;
-      j.onload = function () {
-        loaded.jQuery = true;
-        console.log('jQuery finished loading');
-        finishedLoad();
-      };
-      
-      head.appendChild(j);
+      appendScript({
+        source: 'jQuerySource',
+        name: 'jQuery',
+        head: head
+      });
     }
     
     if (!loaded.easyXDM) {
-      var e = document.createElement('script');
-      e.src = config.easyXDMSource;
-      e.onload = function () {
-        loaded.easyXDM = true;
-        console.log('easyXDM finished loading');
-        finishedLoad();
-      };
-      
-      head.appendChild(e);
+      appendScript({
+        source: 'easyXDMSource',
+        name: 'easyXDM',
+        head: head
+      });
     }
     
     if (!loaded.style) {
@@ -91,6 +83,25 @@
     }
     
     finishedLoad();
+  }
+  
+  /**
+   *  Appends a script elemnt to <head>
+   * @param {object} options containing parameters of:
+   *   @param {string} source url from Config
+   *   @param {string} name of script being loaded
+   *   @param {object} head element to append script to
+   */
+  function appendScript(options) {
+    console.log('appendScript()');
+    var script = document.createElement('script');
+    script.src = config[options.source];// easyXDMSource;
+    script.onload = function () {
+      loaded[options.name] = true;
+      console.log(options.name + ' finished loading');
+      finishedLoad();
+    };
+    options.head.appendChild(script);
   }
   
   function externalIsLoaded() {
