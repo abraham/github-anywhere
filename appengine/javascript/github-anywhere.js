@@ -128,8 +128,8 @@
     }
 
     if (readyQueue.length > 0) {
-      $.each(readyQueue, function (i, func) {
-        func(G);
+      $.each(readyQueue, function (index, Fn) {
+        Fn(G);
       });
     }
   }
@@ -141,7 +141,9 @@
   
   function scanPage(selector) {
     console.log('scanPage()');
-    var $github, $link, user, repo, selector = selector ? selector : 'a.github-anywhere', following = JSON.parse(get('following'));
+    var $github, $link, user, repo,
+        selector = selector ? selector : 'a.github-anywhere',
+        following = JSON.parse(get('following'));
 
     $github = $(selector);
     $github.each(function () {
@@ -149,21 +151,21 @@
       if ($this.hasClass('github-anywhere-watch')) {
         $this.html("<span><span class='github-anywhere-icon'></span>" + $this.html() + '</span>');
         if (get('watching_' + $this.attr('data-user') + '/' + $this.attr('data-repo'))) {
-          $this.addClass('github-anywhere-enabled')
+          $this.addClass('github-anywhere-enabled');
           $this.find('span').html('<span class="github-anywhere-icon"></span>Unwatch ' + $this.attr('data-user') + '/' + $this.attr('data-repo') + ' on GitHub');
         } else {
-          $this.removeClass('github-anywhere-enabled')
+          $this.removeClass('github-anywhere-enabled');
           $this.find('span').html('<span class="github-anywhere-icon"></span>Watch ' + $this.attr('data-user') + '/' + $this.attr('data-repo') + ' on GitHub');
         }
       } else {
         $this.html('<span>' + $this.html() + '</span>');
         if ($.inArray($this.attr('data-user'), following) !== -1) {
-          $this.addClass('github-anywhere-enabled')
+          $this.addClass('github-anywhere-enabled');
           $this.children().text('Unfollow ' + $this.attr('data-user') + ' on GitHub');
         }
       }
     });
-    $github.addClass('github-anywhere-minibutton')
+    $github.addClass('github-anywhere-minibutton');
     $github.click(function () {
       console.log('click()');
       $link = $(this);
@@ -180,7 +182,14 @@
         if (get('accessToken')) {
           toggleWatching({ selection: $link });
         } else {
-          set('nextAction', JSON.stringify({ action: 'toggle', type: 'repo', target: { repo: repo, user: user } }));
+          set('nextAction', JSON.stringify({
+            action: 'toggle',
+            type: 'repo',
+            target: {
+              repo: repo,
+              user: user
+            }
+          }));
           startAuthentication();
         }
       }
@@ -202,8 +211,9 @@
   
   function startAuthentication() {
     console.log('startAuthentication()');
-    var url, child;
-    url = 'https://github.com/login/oauth/authorize?client_id=' + config.clientID + '&redirect_uri=' + config.redirectURI + '&scope=' + config.scope;
+    var child,
+        url = 'https://github.com/login/oauth/authorize';
+    url += '?client_id=' + config.clientID + '&redirect_uri=' + config.redirectURI + '&scope=' + config.scope;
     child = window.open(url, '', 'width=975,height=600');
     checkForCode();
     return false;
@@ -229,9 +239,9 @@
 
   function performNextAction() {
     console.log('performNextAction()');
-    var nextAction;
-    if (get('nextAction')) {
-      nextAction = JSON.parse(get('nextAction'));
+    var nextAction = get('nextAction');
+    if (nextAction) {
+      nextAction = JSON.parse(nextAction);
       remove('nextAction');
       switch (nextAction.type) {
         case 'user':
@@ -273,7 +283,7 @@
     if ($link.hasClass('github-anywhere-enabled')) {
       rpc.post({ path: '/user/unfollow/' + user, parameters: { access_token: get('accessToken') } }, function (response){
         console.log('rpc.post(user/unfollow)');
-        $link.removeClass('github-anywhere-enabled')
+        $link.removeClass('github-anywhere-enabled');
         $link.children().text('Follow ' + user + ' on GitHub');
         set('following', JSON.stringify(response.users));
       }, function (errorObj){
@@ -282,7 +292,7 @@
     } else {
       rpc.post({ path: '/user/follow/' + user, parameters: { access_token: get('accessToken') } }, function (response){
         console.log('rpc.post(user/follow)');
-        $link.addClass('github-anywhere-enabled')
+        $link.addClass('github-anywhere-enabled');
         $link.children().text('Unfollow ' + user + ' on GitHub');
         set('following', JSON.stringify(response.users));
       }, function (errorObj){
@@ -297,7 +307,7 @@
     if ($link.hasClass('github-anywhere-enabled')) {
       rpc.post({ path: '/repos/unwatch/' + user + '/' + repo, parameters: { access_token: get('accessToken') } }, function (response){
         console.log('rpc.post(repos/unwatch)');
-        $link.removeClass('github-anywhere-enabled')
+        $link.removeClass('github-anywhere-enabled');
         $link.find('span').html('<span class="github-anywhere-icon"></span>Watch ' + user + '/' + repo + ' on GitHub');
         remove('watching_' + response.repository.owner + '/' + response.repository.name);
       }, function (errorObj){
@@ -306,7 +316,7 @@
     } else {
       rpc.post({ path: '/repos/watch/' + user + '/' + repo, parameters: { access_token: get('accessToken') } }, function (response){
         console.log('rpc.post(repos/watch)');
-        $link.addClass('github-anywhere-enabled')
+        $link.addClass('github-anywhere-enabled');
         $link.find('span').html('<span class="github-anywhere-icon"></span>Unwatch ' + user + '/' + repo + ' on GitHub');
         set('watching_' + response.repository.owner + '/' + response.repository.name, true);
       }, function (errorObj){
