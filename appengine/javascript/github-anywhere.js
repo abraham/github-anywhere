@@ -400,7 +400,7 @@
   function set(key, value) {
     console.log('set()');
     localStorage.setItem('gitHubAnywhere_' + key, value);
-    localStorage.setItem('gitHubAnywhere_' + key + 'Time', time());
+    localStorage.setItem('gitHubAnywhere_' + key + 'Time', getTime());
   }
   
   /**
@@ -419,8 +419,8 @@
    *  @returns {integer}
    *  @private
    */
-  function time() {
-    console.log('time()');
+  function getTime() {
+    console.log('getTime()');
     var d = new Date();
     return d.getTime();
   }
