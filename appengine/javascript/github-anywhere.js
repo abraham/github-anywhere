@@ -1,21 +1,21 @@
 (function () {
   var G = {},
-  rpc = false,
-  loaded = {
-    jQuery: typeof window.jQuery === 'function' || false,
-    easyXDM: typeof window.easyXDM === 'object' || false,
-    style: false
-  },
-  readyQueue = [],
-  config = {
-    xdrURL: 'https://githubanywhere.appspot.com/xdr.html',
-    clientID: '605fdb0289347957e1b1',
-    redirectURI: 'https://githubanywhere.appspot.com/callback.html',
-    scope: 'user,public_repo,gist',
-    easyXDMSource: 'https://githubanywhere.appspot.com/javascript/easyXDM.min.js',
-    jQuerySource: 'https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js',
-    styleSource: 'https://githubanywhere.appspot.com/style/style.css'
-  };
+      rpc = false,
+      loaded = {
+        jQuery: typeof window.jQuery === 'function' || false,
+        easyXDM: typeof window.easyXDM === 'object' || false,
+        style: false
+      },
+      readyQueue = [],
+      config = {
+        xdrURL: 'https://githubanywhere.appspot.com/xdr.html',
+        clientID: '605fdb0289347957e1b1',
+        redirectURI: 'https://githubanywhere.appspot.com/callback.html',
+        scope: 'user,public_repo,gist',
+        easyXDMSource: 'https://githubanywhere.appspot.com/javascript/easyXDM.min.js',
+        jQuerySource: 'https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js',
+        styleSource: 'https://githubanywhere.appspot.com/style/style.css'
+      };
   
   // Fix issues with browsers that don't have consoles enabled.
   if (!('console' in window)) {
